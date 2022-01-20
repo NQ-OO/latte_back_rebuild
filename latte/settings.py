@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-#'django-insecure-ltr9bq74n+i07zp8-^!44mjnfruae5d%!opn^lvl7cq^%da)$5'
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY ='django-insecure-ltr9bq74n+i07zp8-^!44mjnfruae5d%!opn^lvl7cq^%da)$5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,16 +91,23 @@ WSGI_APPLICATION = 'latte.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'latte_first',
+#         'HOST' : 'localhost',
+#         'USERNAME' : 'root',
+#         'PASSWORD' : os.environ.get('DATABASE_PASSWORD'),
+#         'PORT' : '3306'
+#         },
+#     }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'latte_first',
-        'HOST' : 'localhost',
-        'USERNAME' : 'root',
-        'PASSWORD' : os.environ.get('DATABASE_PASSWORD'),
-        'PORT' : '3306'
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
 
 
 
