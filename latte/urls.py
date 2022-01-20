@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 import latte.views
-from latte.views import QuestViewSet
+from latte.views import QuestViewSet, QuestDoneAPIView
 # from accounts.views import ProfileViewSet
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
@@ -31,11 +31,12 @@ router.register('quests',QuestViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('rest-auth/', include('rest_auth.urls')),
-    # path('rest-auth/signup/', include('rest_auth.registration.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/signup/', include('rest_auth.registration.urls')),
     # path('latte/', include('latte.urls')),
     # path('', latte.views.index, name='index'),
     path('', include(router.urls)),
+    path('<int:id>/done/', QuestDoneAPIView.as_view(), name= "done-quest"),
     path('api/token/', obtain_auth_token, name='obtain-token'),
 ]
 

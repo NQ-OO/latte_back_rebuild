@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Quest, School, Category
+from .models import Quest, School, Category, Done
 
 
 
@@ -14,6 +14,11 @@ class QuestSerializer(serializers.ModelSerializer) :
 
     class Meta :
       model = Quest # quest 모델 사용
+      fields = '__all__'
+
+class DoneSerializer(serializers.ModelSerializer) :
+    class Meta :
+      model = Done
       fields = '__all__'
 
     
