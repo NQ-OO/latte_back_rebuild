@@ -21,4 +21,12 @@ class DoneSerializer(serializers.ModelSerializer) :
       model = Done
       fields = '__all__'
 
+class HottestSerializer(serializers.ModelSerializer) :
+    # dictionary = serializers.DictField(
+    #   child = serializers.CharField())
+
+    class Meta :
+      model = Quest # quest 모델 사용
+      fields = '__all__'
+
     

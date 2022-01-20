@@ -6,13 +6,11 @@ from .models import Done, Quest, School, Category
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets
-from .serializers import QuestSerializer, DoneSerializer
+from .serializers import QuestSerializer, DoneSerializer, HottestSerializer
 from latte import serializers
 from django.views.decorators.csrf import csrf_exempt
 
 
-def index(request):
-    return render(request, 'latte/index.html')
 
 class QuestViewSet(viewsets.ModelViewSet):
 
@@ -51,5 +49,16 @@ class QuestDoneAPIView(APIView) :
             result = {'quest status changed'}
             return Response(result)
 
-            
-        
+
+class HottestAPIView(APIView):
+    queryset = Quest.objects.all().order_by('-done_count')
+    serializer_class = HottestSerializer
+    # Response({"uielements": result})
+
+    def get(self, request) :
+        get_quest_num_index = 10
+        queryset = Quest.objects.all().order_by('-done_count')#[:get_quest_num_index]
+        serializer = QuestSerializer(queryset, many=True) 
+        # print('queryset.count:', queryset.count)
+        result = { 'HottestQuests' : serializer.data}
+        return Response(result)    
