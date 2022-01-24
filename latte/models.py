@@ -3,12 +3,17 @@ from django.db.models.deletion import CASCADE
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-
 # Create your models here.
 
 class Category(models.Model):
     title = models.CharField(max_length=256)
+    quest_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
+    
+    def count_quests(self):
+        category_filtered_quest= Quest.objects.filter(category_id = self.id)
+        self.quest_count = category_filtered_quest.count()
+        self.save()
 
     def update_date(self): 
         self.updated_at = timezone.now()
@@ -19,7 +24,13 @@ class Category(models.Model):
 
 class School(models.Model):
     title = models.CharField(max_length=256)
+    quest_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
+    
+    def count_quests(self):
+        school_filtered_quest= Quest.objects.filter(school_id = self.id)
+        self.quest_count = school_filtered_quest.count()
+        self.save()
 
     def update_date(self): 
         self.updated_at = timezone.now()
@@ -28,7 +39,6 @@ class School(models.Model):
     def __str__(self):
         return self.title
     
-
 
 class Quest(models.Model): 
     todo_quest = models.CharField(max_length=256)

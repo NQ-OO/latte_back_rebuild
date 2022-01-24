@@ -35,3 +35,19 @@ class HottestSerializer(serializers.ModelSerializer) :
       fields = '__all__'
 
     
+class SchoolSerializer(serializers.ModelSerializer) :               
+    class Meta :
+      model = School
+      fields = '__all__'
+      
+class CategorySerializer(serializers.ModelSerializer) :               
+    class Meta :
+      model = Category
+      fields = '__all__'
+      
+      
+class HotSchoolSerializer(serializers.ModelSerializer) :               
+    class Meta :
+      model = School
+      fields = ('title', 'quest_count')
+      

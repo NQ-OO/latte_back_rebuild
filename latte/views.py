@@ -1,4 +1,5 @@
 
+from cgitb import reset
 from unicodedata import category
 from venv import create
 from django.shortcuts import render
@@ -8,14 +9,14 @@ from .models import Done, Quest, School, Category
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets
-from .serializers import QuestSerializer, DoneSerializer, HottestSerializer
+from .serializers import QuestSerializer, DoneSerializer, HottestSerializer, SchoolSerializer, CategorySerializer, HotSchoolSerializer
 from latte import serializers
 from django.views.decorators.csrf import csrf_exempt
+from .models import Quest, School, Category
 
 
 
 class QuestViewSet(viewsets.ModelViewSet):
-
     # permission_classes = (IsAuthenticated, )
     queryset = Quest.objects.all()
     serializer_class = QuestSerializer
@@ -29,20 +30,23 @@ class QuestViewSet(viewsets.ModelViewSet):
         result = { 'Quests' : serializer.data}
         return Response(result)
     
-    # def create(self, request) :
-    #     created_quest = Quest()
-    #     created_quest.todo_quest = request.todo_quest
-    #     author = request.author
-    #     created_quest.author = author
-    #     created_quest.author_name = author.username
-    #     created_quest.schoool = request.school
-    #     created_quest.category = request.category
-    #     created_quest.save()
+    def create(self, request) :
+        serializer = QuestSerializer(data=request.data)
+        school = School.objects.get(id = request.data['school'])
+        category = Category.objects.get(id = request.data['category'])
+        if serializer.is_valid() :
+            serializer.save()
+            school.count_quests()
+            school.save()
+            category.count_quests()
+            category.save()
+            return Response(serializer.data, status=201)
+            
+        else :
+            return Response(serializer.errors, status=400)
+            
         
-        
-
-        
-    
+            
 # @csrf_exempt
 class QuestDoneAPIView(APIView) :
     def post(self, request, id) :
@@ -78,3 +82,43 @@ class HottestAPIView(APIView):
         # print('queryset.count:', queryset.count)
         result = { 'HottestQuests' : serializer.data}
         return Response(result)    
+    
+    
+class SchoolViewSet(viewsets.ModelViewSet):
+    # permission_classes = (IsAuthenticated, )
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    
+    def create(self, request):
+        serializer = SchoolSerializer(data=request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else :
+            return Response(serializer.errors, status=400)
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    # permission_classes = (IsAuthenticated, )
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    
+    def create(self, request):
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else :
+            return Response(serializer.errors, status=400)
+
+
+class HotSchoolAPIView(APIView):
+    queryset = School.objects.all()
+    serializer_class = HotSchoolSerializer
+    # Response({"uielements": result})
+    def get(self, request) :
+        queryset = School.objects.all().order_by('-quest_count')
+        serializer = HotSchoolSerializer(queryset, many=True)
+        return Response(serializer.data, status=201)
+    
+    
