@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Quest, School, Category, Done
+from django.contrib.auth.models import User
 
 
 
@@ -7,16 +8,20 @@ from .models import Quest, School, Category, Done
 #     def __init__(self, dictionary):
 #         self.dict = dictionary
 
-
 class QuestSerializer(serializers.ModelSerializer) :
-    # dictionary = serializers.DictField(
-    #   child = serializers.CharField())
-
+    def getUsername(self, quest):
+      return quest.author.username
+    author_name = serializers.SerializerMethodField("getUsername")
     class Meta :
       model = Quest # quest 모델 사용
       fields = '__all__'
+      # fields = ('todo_quest', 'user', 'author', 'school')
+      
+      def get_username(self, obj):
+        return obj.owner.username
 
-class DoneSerializer(serializers.ModelSerializer) :
+
+class DoneSerializer(serializers.ModelSerializer) :               
     class Meta :
       model = Done
       fields = '__all__'

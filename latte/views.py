@@ -1,4 +1,6 @@
 
+from unicodedata import category
+from venv import create
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated 
@@ -26,6 +28,20 @@ class QuestViewSet(viewsets.ModelViewSet):
         # print('queryset.count:', queryset.count)
         result = { 'Quests' : serializer.data}
         return Response(result)
+    
+    # def create(self, request) :
+    #     created_quest = Quest()
+    #     created_quest.todo_quest = request.todo_quest
+    #     author = request.author
+    #     created_quest.author = author
+    #     created_quest.author_name = author.username
+    #     created_quest.schoool = request.school
+    #     created_quest.category = request.category
+    #     created_quest.save()
+        
+        
+
+        
     
 # @csrf_exempt
 class QuestDoneAPIView(APIView) :

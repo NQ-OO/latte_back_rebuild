@@ -33,6 +33,7 @@ class School(models.Model):
 class Quest(models.Model): 
     todo_quest = models.CharField(max_length=256)
     author = models.ForeignKey(User, null=True, on_delete=CASCADE)
+    # author_name = models.CharField(max_length=256, null=True)
     school = models.ForeignKey(School, on_delete=models.CASCADE, null=False, default=1)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, default=6)
     done_users = models.ManyToManyField(User, blank=True, related_name='done_user', through='Done') 
