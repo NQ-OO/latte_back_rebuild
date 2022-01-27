@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     # #My app
     'latte',
     'accounts',
+    
+    #deploy
+    'corsheaders',
 ]
 
 SITE_ID = 1
@@ -65,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware', 
 ]
 
 ROOT_URLCONF = 'latte.urls'
@@ -172,4 +177,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+
+# [
+#     'localhost:3000/',
+#     'google.com',
+#     'localhost:8000/', 
+# ]
+
 
