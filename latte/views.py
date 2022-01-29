@@ -13,6 +13,8 @@ from .serializers import QuestSerializer, DoneSerializer, HottestSerializer, Sch
 from latte import serializers
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quest, School, Category
+from rest_framework.generics import GenericAPIView
+
 
 
 

@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     
     #deploy
     'corsheaders',
+    
+    #api documentation
+    'drf_yasg',
 ]
 
 SITE_ID = 1
