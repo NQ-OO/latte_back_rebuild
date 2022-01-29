@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 import latte.views
-from latte.views import QuestViewSet, QuestDoneAPIView, HottestAPIView, SchoolViewSet, CategoryViewSet, HotSchoolAPIView
+from latte.views import QuestViewSet, QuestDoneAPIView, QuestLikeAPIView, WebHottestAPIView, AppHottestAPIView, SchoolViewSet, CategoryViewSet, HotSchoolAPIView
 # from accounts.views import ProfileViewSet
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
@@ -57,7 +57,9 @@ urlpatterns = [
     # path('', latte.views.index, name='index'),
     path('', include(router.urls)),
     path('<int:id>/done/', QuestDoneAPIView.as_view(), name= "done_quest"),
-    path('hottest/', HottestAPIView.as_view(), name= "hottest_quest"),
+    path('<int:id>/like/', QuestLikeAPIView.as_view(), name= "like_quest"),
+    path('web-hottest/', WebHottestAPIView.as_view(), name= "hottest_quest"),
+    path('app-hottest/', AppHottestAPIView.as_view(), name= "hottest_quest"),
     path('hot-school-list/', HotSchoolAPIView.as_view(), name= "hottest_quest"),
     path('api/token/', obtain_auth_token, name='obtain_token'),
     #api documentaions

@@ -12,10 +12,8 @@ from rest_framework import viewsets
 from .serializers import QuestSerializer, DoneSerializer, HottestSerializer, SchoolSerializer, CategorySerializer, HotSchoolSerializer
 from latte import serializers
 from django.views.decorators.csrf import csrf_exempt
-from .models import Quest, School, Category
+from .models import Quest, School, Category, Like
 from rest_framework.generics import GenericAPIView
-
-
 
 
 class QuestViewSet(viewsets.ModelViewSet):
@@ -70,9 +68,43 @@ class QuestDoneAPIView(APIView) :
             quest.save()
             result = {'quest status changed'}
             return Response(result)
+        
+class QuestLikeAPIView(APIView) :
+    def post(self, request, id) :
+        user = request.user
+        quest = Quest.objects.get(id = id)
+        like_list = quest.like_set.filter(user_id = user.id)
+        if len(like_list) > 0: 
+            like_list.delete()
+            quest.count_like_user()
+            quest.save()
+            result = {'quest status changed'}
+            return Response(result)
+        else:
+            new_like_quest_user = Like()
+            new_like_quest_user.user = user
+            new_like_quest_user.quest = quest
+            new_like_quest_user.save()
+            quest.count_like_user()
+            quest.save()
+            result = {'quest status changed'}
+            return Response(result)
 
 
-class HottestAPIView(APIView):
+class WebHottestAPIView(APIView):
+    queryset = Quest.objects.all().order_by('-like_count')
+    serializer_class = HottestSerializer
+    # Response({"uielements": result})
+
+    def get(self, request) :
+        get_quest_num_index = 10
+        queryset = Quest.objects.all().order_by('-like_count')#[:get_quest_num_index]
+        serializer = QuestSerializer(queryset, many=True) 
+        # print('queryset.count:', queryset.count)
+        result = { 'HottestQuests' : serializer.data}
+        return Response(result)    
+
+class AppHottestAPIView(APIView):
     queryset = Quest.objects.all().order_by('-done_count')
     serializer_class = HottestSerializer
     # Response({"uielements": result})

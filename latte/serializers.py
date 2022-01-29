@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Quest, School, Category, Done
+from .models import Quest, School, Category, Done, Like
 from django.contrib.auth.models import User
 
 
@@ -24,6 +24,11 @@ class QuestSerializer(serializers.ModelSerializer) :
 class DoneSerializer(serializers.ModelSerializer) :               
     class Meta :
       model = Done
+      fields = '__all__'
+
+class LikeSerializer(serializers.ModelSerializer) :               
+    class Meta :
+      model = Like
       fields = '__all__'
 
 class HottestSerializer(serializers.ModelSerializer) :

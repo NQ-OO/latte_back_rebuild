@@ -48,6 +48,8 @@ class Quest(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=False, default=6)
     done_users = models.ManyToManyField(User, blank=True, related_name='done_user', through='Done') 
     done_count = models.IntegerField(default=0)
+    like_users = models.ManyToManyField(User, blank=True, related_name='like_user', through='Like') 
+    like_count = models.IntegerField(default=0)
     active = models.BooleanField(default=1)
     # content = models.TextField()
     # like = models.IntegerField(default=0)
@@ -62,6 +64,11 @@ class Quest(models.Model):
         self.done_count = self.done_users.count()
         self.save()
         # return self.done_user.count()
+    
+    def count_like_user(self):
+        self.like_count = self.like_users.count()
+        self.save()
+        # return self.done_user.count()
 
     def __str__(self):
         return self.todo_quest
@@ -70,6 +77,11 @@ class Done(models.Model) :
     user = models.ForeignKey(User, null=True, on_delete=CASCADE)
     quest = models.ForeignKey(Quest, null=True, on_delete=CASCADE)
     active = models.BooleanField(default=1)
+    created_at = models.DateTimeField(default=timezone.now)
+    
+class Like(models.Model) :
+    user = models.ForeignKey(User, null=True, on_delete=CASCADE)
+    quest = models.ForeignKey(Quest, null=True, on_delete=CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
    
    
