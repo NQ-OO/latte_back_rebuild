@@ -23,5 +23,14 @@ class ProfileAPIView(APIView):
           return Response(user_profile_serializer.data, status=status.HTTP_200_OK)
         else :
           return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, id) :
+      if id is None:
+        return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+      else :
+        user_profile = Profile.objects.get(id = id)
+        serializer = ProfileSerializer(user_profile)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
         
     
