@@ -64,5 +64,8 @@ urlpatterns = [
     path('api/token/', obtain_auth_token, name='obtain_token'),
     #api documentaions
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    #accoutns
+    path('accounts/', include('accounts.urls')), 
+
 ]
 

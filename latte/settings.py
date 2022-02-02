@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    'allauth.socialaccount', 
 
     # #My app
     'latte',
@@ -188,12 +189,5 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False
 }
 
-
-
-# [
-#     'localhost:3000/',
-#     'google.com',
-#     'localhost:8000/', 
-# ]
 
 
