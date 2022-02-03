@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 import latte.views
-from latte.views import QuestViewSet, QuestDoneAPIView, QuestLikeAPIView, WebHottestAPIView, AppHottestAPIView, SchoolViewSet, CategoryViewSet, HotSchoolAPIView
+from latte.views import QuestViewSet, QuestDoneAPIView, QuestLikeAPIView, WebHottestAPIView, AppHottestAPIView, SchoolViewSet, CategoryViewSet, HotSchoolAPIView, MyQuestsAPIView, MyDoneQuestsAPIView
 # from accounts.views import ProfileViewSet
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
@@ -61,6 +61,9 @@ urlpatterns = [
     path('web-hottest/', WebHottestAPIView.as_view(), name= "hottest_quest"),
     path('app-hottest/', AppHottestAPIView.as_view(), name= "hottest_quest"),
     path('hot-school-list/', HotSchoolAPIView.as_view(), name= "hottest_quest"),
+    path('my-quests/', MyQuestsAPIView.as_view(), name= "my-quests-list"),
+    path('my-quests/<int:id>/', MyQuestsAPIView.as_view(), name= "my-quests-update"),
+    path('my-done-quests/', MyDoneQuestsAPIView.as_view(), name= "my-done-quests"),
     path('api/token/', obtain_auth_token, name='obtain_token'),
     #api documentaions
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
