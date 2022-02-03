@@ -1,4 +1,4 @@
-from attr import field
+
 from rest_framework import serializers
 from .models import Quest, School, Category, Done, Like
 from django.contrib.auth.models import User
