@@ -33,14 +33,19 @@ class QuestViewSet(viewsets.ModelViewSet):
     # 웹에서 익명으로 만드는 사람들을 위한 
     def create(self, request) :
         serializer = QuestSerializer(data=request.data)
-        school = School.objects.get(id = request.data['school'])
-        category = Category.objects.get(id = request.data['category'])
+        print(request.data)
+        # try : 
+        # school = School.objects.get(id = request.data['school'])
+        # category = Category.objects.get(id = request.data['category'])
+        # except :
+            
         if serializer.is_valid() :
+            print("serializer :", serializer.data)
             serializer.save()
-            school.count_quests()
-            school.save()
-            category.count_quests()
-            category.save()
+            # school.count_quests()
+            # school.save()
+            # category.count_quests()
+            # category.save()
             return Response(serializer.data, status=201)
             
         else :
@@ -181,8 +186,6 @@ class MyQuestsAPIView(APIView):
             else :
                 return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
         
-        
-
 
 class MyDoneQuestsAPIView(APIView):
     queryset = Quest.objects.all()
@@ -191,13 +194,8 @@ class MyDoneQuestsAPIView(APIView):
         author_id = request.user.id
         done_querysets = Done.objects.filter(user = author_id)
         done_querysets_id_list = list(map(lambda x: x.quest_id , done_querysets ))
-        quest_querysets = Quest.objects.filter(
-            id__in = done_querysets_id_list
-            )
-        
+        quest_querysets = Quest.objects.filter(id__in = done_querysets_id_list)
         queryset = quest_querysets.order_by('-id')
         print(queryset)
         serializer = MyDoneQuestsSerializer(queryset, many=True)
         return Response(serializer.data, status=201)
-    
-    

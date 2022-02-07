@@ -11,15 +11,26 @@ from django.contrib.auth.models import User
 
 class QuestSerializer(serializers.ModelSerializer) :
     def getUsername(self, quest):
-      return quest.author.username
+      try : 
+        username = quest.author.username
+        return username
+      except :
+        return
+    def getSchoolname(self, quest):
+      try : 
+        school = quest.school.title
+        return school
+      except :
+        return
     author_name = serializers.SerializerMethodField("getUsername")
+    school_name = serializers.SerializerMethodField("getSchoolname")
     class Meta :
       model = Quest # quest 모델 사용
       fields = '__all__'
       # fields = ('todo_quest', 'user', 'author', 'school')
       
-      def get_username(self, obj):
-        return obj.owner.username
+      # def get_username(self, obj):
+      #   return obj.owner.username
 
 
 class DoneSerializer(serializers.ModelSerializer) :               

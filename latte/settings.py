@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import datetime
+# import django_filters
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,7 +53,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
     'allauth.socialaccount', 
-
+    
+    #JWT
+    # 'django_filters',
+    
     # #My app
     'latte',
     'accounts',
@@ -111,23 +117,23 @@ WSGI_APPLICATION = 'latte.wsgi.application'
 #         },
 #     }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'site1',
-        'USER': 'latteadmin',
-        'HOST' : '172.17.0.1',
-        'PASSWORD' : '123456789',
-        'PORT' : '3306'
-        },
-    }
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'site1',
+#         'USER': 'latteadmin',
+#         'HOST' : '172.17.0.1',
+#         'PASSWORD' : '123456789',
+#         'PORT' : '3306'
+#         },
 #     }
-# }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 
@@ -182,6 +188,18 @@ REST_FRAMEWORK = {
     ]
 }
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_PARSER_CLASSES': [
+#         'rest_framework.parsers.MultiPartParser',
+#         'rest_framework.parsers.JSONParser',
+#     ],
+#     'DEFAULT_AUTHENTICATION_CLASSES':[
+#         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+
+#     ],
+#     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+# }
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -189,5 +207,12 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False
 }
 
+# REST_USE_JWT = True
 
-
+# JWT_AUTH = {
+#     'JWT_SECRET_KEY': SECRET_KEY,
+#     'JWT_ALGORITHM': 'HS256',
+#     'JWT_ALLOW_REFRESH': True,
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+# }
