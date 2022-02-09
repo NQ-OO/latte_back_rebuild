@@ -66,9 +66,7 @@ INSTALLED_APPS = [
     
     #api documentation
     'drf_yasg',
-    
-    #cors error
-    'corsheaders',
+
 ]
 
 SITE_ID = 1
