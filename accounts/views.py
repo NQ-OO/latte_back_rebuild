@@ -5,6 +5,7 @@ from .serializers import ProfileSerializer, CreateRandomIdSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 
     
@@ -46,7 +47,10 @@ class CreateRandomIdAPIView(APIView):
       serializer = CreateRandomIdSerializer(data = data)
       if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
+        user = User.objects.get(id = new_id)
+        token = Token.objects.create(user=user)
+        return Response(
+          {"User" : serializer.data, "Token" : token.key}, status=201)
       else :
         return Response(serializer.errors, status=400)
 
