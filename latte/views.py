@@ -24,7 +24,7 @@ class QuestViewSet(viewsets.ModelViewSet):
 
     def list(self, request) :
         get_quest_num_index = 10
-        queryset = Quest.objects.all().order_by('-id')[:get_quest_num_index]
+        queryset = Quest.objects.all().order_by('-id')#[:get_quest_num_index]
         serializer = QuestSerializer(queryset, many=True) 
         # print('queryset.count:', queryset.count)
         result = { 'Quests' : serializer.data}
