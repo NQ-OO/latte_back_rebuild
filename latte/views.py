@@ -34,14 +34,14 @@ class QuestViewSet(viewsets.ModelViewSet):
     def create(self, request) :
         serializer = QuestSerializer(data=request.data)
         print(request.data)
-        # try : 
-        school = School.objects.get(id = request.data['school'])
-        category = Category.objects.get(id = request.data['category'])
-        # except :
             
         if serializer.is_valid() :
             # print("serializer :", serializer.data)
             serializer.save()
+            quest = Quest.objects.get(id = serializer.data['id'])
+            # print("quest : ", quest.)
+            school = School.objects.get(id = quest.school_id)
+            category = Category.objects.get(id = quest.category_id)
             school.count_quests()
             school.save()
             category.count_quests()
