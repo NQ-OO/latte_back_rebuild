@@ -35,17 +35,17 @@ class QuestViewSet(viewsets.ModelViewSet):
         serializer = QuestSerializer(data=request.data)
         print(request.data)
         # try : 
-        # school = School.objects.get(id = request.data['school'])
-        # category = Category.objects.get(id = request.data['category'])
+        school = School.objects.get(id = request.data['school'])
+        category = Category.objects.get(id = request.data['category'])
         # except :
             
         if serializer.is_valid() :
             # print("serializer :", serializer.data)
             serializer.save()
-            # school.count_quests()
-            # school.save()
-            # category.count_quests()
-            # category.save()
+            school.count_quests()
+            school.save()
+            category.count_quests()
+            category.save()
             return Response(serializer.data, status=201)
             
         else :
