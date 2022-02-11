@@ -40,7 +40,7 @@ class QuestViewSet(viewsets.ModelViewSet):
         # except :
             
         if serializer.is_valid() :
-            print("serializer :", serializer.data)
+            # print("serializer :", serializer.data)
             serializer.save()
             # school.count_quests()
             # school.save()
