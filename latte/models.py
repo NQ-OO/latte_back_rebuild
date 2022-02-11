@@ -43,10 +43,10 @@ DEFAULT = 0
 class Quest(models.Model): 
     
     todo_quest = models.CharField(max_length=256)
-    author = models.ForeignKey(User, on_delete=CASCADE, default=0)
+    author = models.ForeignKey(User, on_delete=CASCADE, default=1)
     # author_name = models.CharField(max_length=256, null=True)
-    school = models.ForeignKey(School, on_delete=models.CASCADE, default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=0)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, default=1)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     done_users = models.ManyToManyField(User, blank=True, related_name='done_user', through='Done') 
     done_count = models.IntegerField(default=0)
     like_users = models.ManyToManyField(User, blank=True, related_name='like_user', through='Like') 
