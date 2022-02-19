@@ -54,7 +54,3 @@ class CreateRandomIdAPIView(APIView):
       else :
         return Response(serializer.errors, status=400)
 
-
-
-      
-      return Response(serializer.data, status=status.HTTP_200_OK)
