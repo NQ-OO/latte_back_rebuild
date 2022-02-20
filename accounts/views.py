@@ -2,7 +2,7 @@ import imp
 from django.shortcuts import render
 from rest_framework import viewsets,status
 from .models import Profile
-from .serializers import ProfileSerializer, CreateRandomIdSerializer, ChangeUserInfoSerializer
+from .serializers import ProfileSerializer, CreateRandomIdSerializer, ChangeUserInfoSerializer, LoginSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -10,6 +10,9 @@ from rest_framework.authtoken.models import Token
 from latte.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import serializers
+from django.contrib.auth import authenticate
+
+
 
 
 
@@ -81,3 +84,30 @@ class ChangeUserInfoAPIView(APIView) :
         else :
           return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
         
+        
+class LoginAPIView(APIView) :
+  queryset = User.objects.all()
+  serializer_class = LoginSerializer
+  
+  def post(self, request) :
+    username = request.POST.get("username", None)
+    password = request.POST.get("password", None)
+    try :
+      user = authenticate(username=username, password=password)
+      print(user)
+      if user is None :
+        print('debug1')
+        return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+      else : 
+        print('debug2')
+        token = Token.objects.get(user_id = user.id)
+        serializer = LoginSerializer(user, data=request.data)
+        if serializer.is_valid() :
+          serializer.save()
+          return Response(
+          {"User" : serializer.data, "Token" : token.key}, status=201)
+        else :
+          return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+    except :
+      
+      return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
