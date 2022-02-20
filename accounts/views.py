@@ -94,14 +94,16 @@ class LoginAPIView(APIView) :
     password = request.POST.get("password", None)
     try :
       user = authenticate(username=username, password=password)
-      print(user)
       if user is None :
-        print('debug1')
         return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
-      else : 
-        print('debug2')
+      else :
+        data = request.data
+        data._mutable = True
+        data['is_staff'] = True
+        data['is_active'] = True
+        data._mutable = False 
         token = Token.objects.get(user_id = user.id)
-        serializer = LoginSerializer(user, data=request.data)
+        serializer = LoginSerializer(user, data=data)
         if serializer.is_valid() :
           serializer.save()
           return Response(
