@@ -74,8 +74,6 @@ class ChangeUserInfoAPIView(APIView) :
         data = request.data
         data._mutable = True
         data['is_active'] = True
-        data['is_staff'] = True
-        data['is_superuser'] = True
         data._mutable = False
         change_user_info_serializer = ChangeUserInfoSerializer(user, data = data)
         if change_user_info_serializer.is_valid():
