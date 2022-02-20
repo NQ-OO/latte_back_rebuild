@@ -71,7 +71,7 @@ class HotSchoolSerializer(serializers.ModelSerializer) :
 class MyQuestsSerializer(serializers.ModelSerializer) :
   class Meta :
     model = Quest
-    fields = ('todo_quest', 'school', 'category', 'active')
+    fields = ('todo_quest', 'school', 'category', 'active', 'done_count')
     
 class MyDoneQuestsSerializer(serializers.ModelSerializer) :
   class Meta :
