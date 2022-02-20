@@ -74,6 +74,8 @@ class ChangeUserInfoAPIView(APIView) :
         data = request.data
         data._mutable = True
         data['is_active'] = True
+        data['is_staff'] = True
+        data['is_superuser'] = True
         data._mutable = False
         change_user_info_serializer = ChangeUserInfoSerializer(user, data = data)
         if change_user_info_serializer.is_valid():
@@ -99,13 +101,10 @@ class LoginAPIView(APIView) :
       else :
         data = request.data
         data._mutable = True
-        data['is_staff'] = True
-        data['is_active'] = True
         data._mutable = False 
         token = Token.objects.get(user_id = user.id)
         serializer = LoginSerializer(user, data=data)
         if serializer.is_valid() :
-          serializer.save()
           return Response(
           {"User" : serializer.data, "Token" : token.key}, status=201)
         else :
