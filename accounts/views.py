@@ -1,11 +1,16 @@
+import imp
 from django.shortcuts import render
 from rest_framework import viewsets,status
 from .models import Profile
-from .serializers import ProfileSerializer, CreateRandomIdSerializer
+from .serializers import ProfileSerializer, CreateRandomIdSerializer, ChangeUserInfoSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from latte.permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import serializers
+
 
 
     
@@ -54,3 +59,25 @@ class CreateRandomIdAPIView(APIView):
       else :
         return Response(serializer.errors, status=400)
 
+class ChangeUserInfoAPIView(APIView) :
+    serializer_class = ChangeUserInfoSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def put(self, request, id) :
+      if id is None:
+        return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+      else :
+        user = User.objects.get(id = id)
+        data = request.data
+        data._mutable = True
+        data['is_active'] = True
+        data._mutable = False
+        change_user_info_serializer = ChangeUserInfoSerializer(user, data = data)
+        if change_user_info_serializer.is_valid():
+          change_user_info_serializer.save()
+          user.set_password(change_user_info_serializer.data.get("password"))
+          user.save()
+          return Response(change_user_info_serializer.data, status=201)
+        else :
+          return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
+        

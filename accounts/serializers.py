@@ -22,3 +22,10 @@ class CreateRandomIdSerializer(serializers.ModelSerializer) :
   def create(self, validated_data):
     user = User.objects.create_user( validated_data["username"], validated_data["email"], validated_data["password"])
     return user
+  
+  
+class ChangeUserInfoSerializer(serializers.ModelSerializer) :
+  password = serializers.CharField(required=True)
+  class Meta :
+    model = User
+    fields = '__all__'
