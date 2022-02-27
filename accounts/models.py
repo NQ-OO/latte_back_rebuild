@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from latte.models import Quest
 
 from latte.models import School
 # Create your models here.
@@ -12,6 +13,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)   
     school = models.TextField(null=True)
     admission_year = models.IntegerField(null=True)
+    my_quests = models.ManyToManyField(Quest, related_name='quests')
+    my_quests_count = models.IntegerField(default=0)
+    # done_quests = models.ForeignKey(Quest, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 
@@ -21,7 +25,7 @@ class Profile(models.Model):
     def update_date(self): 
         self.updated_at = timezone.now()
         self.save()
-    
+        
     @receiver(post_save, sender=User)  
     def create_user_profile(sender, instance, created, **kwargs):        
         if created:          

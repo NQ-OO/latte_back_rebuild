@@ -77,3 +77,8 @@ class MyDoneQuestsSerializer(serializers.ModelSerializer) :
   class Meta :
     model = Quest
     fields = '__all__'
+    
+class MyQuestsSerializer(serializers.ModelSerializer) :
+  class Meta :
+    model = Quest
+    fields = '__all__'

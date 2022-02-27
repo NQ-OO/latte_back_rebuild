@@ -1,5 +1,6 @@
 
 from cgitb import reset
+import imp
 from unicodedata import category
 from venv import create
 from django.shortcuts import render
@@ -9,12 +10,12 @@ from .models import Done, Quest, School, Category
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
-from .serializers import QuestSerializer, DoneSerializer, HottestSerializer, SchoolSerializer, CategorySerializer, HotSchoolSerializer, MyQuestsSerializer, MyDoneQuestsSerializer
+from .serializers import QuestSerializer, DoneSerializer, HottestSerializer, SchoolSerializer, CategorySerializer, HotSchoolSerializer, MyQuestsSerializer, MyDoneQuestsSerializer, MyQuestsSerializer
 from latte import serializers
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quest, School, Category, Like
 from rest_framework.generics import GenericAPIView
-
+from accounts.models import Profile
 
 class QuestViewSet(viewsets.ModelViewSet):
     # permission_classes = (IsAuthenticated, )
@@ -34,6 +35,8 @@ class QuestViewSet(viewsets.ModelViewSet):
     def create(self, request) :
         serializer = QuestSerializer(data=request.data)
         print(request.data)
+        user = request.user
+        profile = Profile.objects.get(id = user.id)
             
         if serializer.is_valid() :
             # print("serializer :", serializer.data)
@@ -46,6 +49,10 @@ class QuestViewSet(viewsets.ModelViewSet):
             school.save()
             category.count_quests()
             category.save()
+            profile.my_quests.add(quest)
+            # print("myquests : ", profile.quests.all())
+            # profile.my_quests_count = len(category.count_quests)
+            profile.save()
             return Response(serializer.data, status=201)
             
         else :
@@ -78,12 +85,15 @@ class QuestDoneAPIView(APIView) :
 class QuestLikeAPIView(APIView) :
     def post(self, request, id) :
         user = request.user
+        profile = Profile.objects.get(id = user.id)
         quest = Quest.objects.get(id = id)
         like_list = quest.like_set.filter(user_id = user.id)
         if len(like_list) > 0: 
             like_list.delete()
             quest.count_like_user()
             quest.save()
+            # profile.my_quests.append(quest)
+            # profile.save()
             result = {'quest status changed'}
             return Response(result)
         else:
@@ -93,6 +103,8 @@ class QuestLikeAPIView(APIView) :
             new_like_quest_user.save()
             quest.count_like_user()
             quest.save()
+            # profile.my_quests.remove(quest)
+            # profile.save()
             result = {'quest status changed'}
             return Response(result)
 
@@ -199,3 +211,4 @@ class MyDoneQuestsAPIView(APIView):
         print(queryset)
         serializer = MyDoneQuestsSerializer(queryset, many=True)
         return Response(serializer.data, status=201)
+    
