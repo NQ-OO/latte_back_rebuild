@@ -15,7 +15,8 @@ class Profile(models.Model):
     admission_year = models.IntegerField(null=True)
     my_quests = models.ManyToManyField(Quest, related_name='quests')
     my_quests_count = models.IntegerField(default=0)
-    # done_quests = models.ForeignKey(Quest, on_delete=models.CASCADE)
+    done_quests = models.ManyToManyField(Quest, related_name='done_quests')
+    done_quests_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(blank=True, null=True)
 

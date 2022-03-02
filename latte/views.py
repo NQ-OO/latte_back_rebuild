@@ -50,8 +50,7 @@ class QuestViewSet(viewsets.ModelViewSet):
             category.count_quests()
             category.save()
             profile.my_quests.add(quest)
-            # print("myquests : ", profile.quests.all())
-            # profile.my_quests_count = len(category.count_quests)
+            profile.my_quests_count = len(profile.quests.all())
             profile.save()
             return Response(serializer.data, status=201)
             
@@ -64,12 +63,16 @@ class QuestViewSet(viewsets.ModelViewSet):
 class QuestDoneAPIView(APIView) :
     def post(self, request, id) :
         user = request.user
+        profile = Profile.objects.get(id = user.id)
         quest = Quest.objects.get(id = id)
         done_list = quest.done_set.filter(user_id = user.id)
         if len(done_list) > 0: 
             done_list.delete()
             quest.count_done_user()
             quest.save()
+            profile.done_quests.remove(quest)
+            profile.done_quests_count = len(profile.done_quests.all())
+            profile.save()
             result = {'quest status changed'}
             return Response(result)
         else:
@@ -79,6 +82,9 @@ class QuestDoneAPIView(APIView) :
             new_done_quest_user.save()
             quest.count_done_user()
             quest.save()
+            profile.done_quests.add(quest)
+            profile.done_quests_count = len(profile.done_quests.all())
+            profile.save()
             result = {'quest status changed'}
             return Response(result)
         
