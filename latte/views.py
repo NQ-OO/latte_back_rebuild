@@ -98,8 +98,6 @@ class QuestLikeAPIView(APIView) :
             like_list.delete()
             quest.count_like_user()
             quest.save()
-            # profile.my_quests.append(quest)
-            # profile.save()
             result = {'quest status changed'}
             return Response(result)
         else:

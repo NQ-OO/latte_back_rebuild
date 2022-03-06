@@ -1,3 +1,4 @@
+from builtins import print
 import imp
 from django.shortcuts import render
 from rest_framework import viewsets,status
@@ -90,16 +91,20 @@ class LoginAPIView(APIView) :
   serializer_class = LoginSerializer
   
   def post(self, request) :
-    username = request.POST.get("username", None)
-    password = request.POST.get("password", None)
+    print(request.data)
+    # username = request.POST.get("username", None)
+    # password = request.POST.get("password", None)
+    username = request.data["username"]
+    password = request.data["password"]
     try :
       user = authenticate(username=username, password=password)
+      print(user)
       if user is None :
         return Response("invalid request", status=status.HTTP_400_BAD_REQUEST)
       else :
         data = request.data
-        data._mutable = True
-        data._mutable = False 
+        # data._mutable = True
+        # data._mutable = False 
         token = Token.objects.get(user_id = user.id)
         serializer = LoginSerializer(user, data=data)
         if serializer.is_valid() :
