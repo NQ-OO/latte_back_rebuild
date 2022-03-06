@@ -91,9 +91,10 @@ class QuestDoneAPIView(APIView) :
 class QuestLikeAPIView(APIView) :
     def post(self, request, id) :
         user = request.user
-        profile = Profile.objects.get(id = user.id)
+        profile = Profile.objects.get(user_id = user.id)
         quest = Quest.objects.get(id = id)
         like_list = quest.like_set.filter(user_id = user.id)
+        
         if len(like_list) > 0: 
             like_list.delete()
             quest.count_like_user()
