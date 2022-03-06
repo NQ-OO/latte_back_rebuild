@@ -36,7 +36,7 @@ class QuestViewSet(viewsets.ModelViewSet):
         serializer = QuestSerializer(data=request.data)
         print(request.data)
         user = request.user
-        profile = Profile.objects.get(id = user.id)
+        profile = Profile.objects.get(user_id = user.id)
             
         if serializer.is_valid() :
             # print("serializer :", serializer.data)
@@ -63,7 +63,7 @@ class QuestViewSet(viewsets.ModelViewSet):
 class QuestDoneAPIView(APIView) :
     def post(self, request, id) :
         user = request.user
-        profile = Profile.objects.get(id = user.id)
+        profile = Profile.objects.get(user_id = user.id)
         quest = Quest.objects.get(id = id)
         done_list = quest.done_set.filter(user_id = user.id)
         if len(done_list) > 0: 
