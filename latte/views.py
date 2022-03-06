@@ -1,4 +1,5 @@
 
+from builtins import print
 from cgitb import reset
 import imp
 from unicodedata import category
@@ -36,8 +37,7 @@ class QuestViewSet(viewsets.ModelViewSet):
         serializer = QuestSerializer(data=request.data)
         print(request.data)
         user = request.user
-        profile = Profile.objects.get(user_id = user.id)
-            
+        profile = Profile.objects.get(user_id = user.id) 
         if serializer.is_valid() :
             # print("serializer :", serializer.data)
             serializer.save()
@@ -50,7 +50,8 @@ class QuestViewSet(viewsets.ModelViewSet):
             category.count_quests()
             category.save()
             profile.my_quests.add(quest)
-            profile.my_quests_count = len(profile.quests.all())
+            # print(profile.quests.)
+            profile.my_quests_count = len(profile.my_quests.all())
             profile.save()
             return Response(serializer.data, status=201)
             
@@ -71,6 +72,7 @@ class QuestDoneAPIView(APIView) :
             quest.count_done_user()
             quest.save()
             profile.done_quests.remove(quest)
+            print(len(profile.done_quests.all()))
             profile.done_quests_count = len(profile.done_quests.all())
             profile.save()
             result = {'quest status changed'}

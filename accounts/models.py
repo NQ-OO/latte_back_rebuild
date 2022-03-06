@@ -13,7 +13,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)   
     school = models.TextField(null=True)
     admission_year = models.IntegerField(null=True)
-    my_quests = models.ManyToManyField(Quest, related_name='quests')
+    my_quests = models.ManyToManyField(Quest, related_name='my_quests')
     my_quests_count = models.IntegerField(default=0)
     done_quests = models.ManyToManyField(Quest, related_name='done_quests')
     done_quests_count = models.IntegerField(default=0)
